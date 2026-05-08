@@ -8,7 +8,10 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function index()
+    /**
+     * Admin product listing
+     */
+    public function adminIndex()
     {
         $sortBy = request('sort_by', 'id');
         $sortDirection = request('sort_direction', 'desc');
@@ -34,6 +37,30 @@ class ProductController extends Controller
                 'sort_direction' => $sortDirection,
                 'per_page' => $perPage,
             ],
+        ]);
+    }
+
+    /**
+     * User-facing product listing
+     */
+    public function index()
+    {
+        $products = Product::orderBy('name', 'asc')
+            ->paginate(12)
+            ->withQueryString();
+
+        return Inertia::render('Products/Index', [
+            'products' => $products,
+        ]);
+    }
+
+    /**
+     * Show product details for users
+     */
+    public function show(Product $product)
+    {
+        return Inertia::render('Products/Show', [
+            'product' => $product,
         ]);
     }
 

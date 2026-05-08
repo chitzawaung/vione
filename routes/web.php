@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,9 +32,30 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::resource('products', ProductController::class)->except(['create', 'show', 'edit']);
+// Admin routes (only accessible by admin users)
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/products', [ProductController::class, 'adminIndex'])->name('products.index');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+});
 
+// User routes (only accessible by regular users)
+Route::middleware(['auth', 'role:user'])->group(function () {
+    // Product routes
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+    
+    // Purchase routes
+    Route::get('/purchase/{product}', [PurchaseController::class, 'create'])->name('purchase.create');
+    Route::post('/purchase/{product}', [PurchaseController::class, 'store'])->name('purchase.store');
+    
+    // Transaction routes
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+});
+
+// Profile routes (accessible by all authenticated users)
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -29,9 +29,25 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </NavLink>
+                                <!-- Admin Navigation -->
+                                <template v-if="$page.props.auth.user.role === 'admin'">
+                                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                        Dashboard
+                                    </NavLink>
+                                    <NavLink :href="route('admin.products.index')" :active="route().current('admin.products.*')">
+                                        Products
+                                    </NavLink>
+                                </template>
+                                
+                                <!-- User Navigation -->
+                                <template v-else>
+                                    <NavLink :href="route('products.index')" :active="route().current('products.*')">
+                                        Products
+                                    </NavLink>
+                                    <NavLink :href="route('transactions.index')" :active="route().current('transactions.index')">
+                                        My Orders
+                                    </NavLink>
+                                </template>
                             </div>
                         </div>
 
@@ -112,9 +128,25 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </ResponsiveNavLink>
+                        <!-- Admin Navigation -->
+                        <template v-if="$page.props.auth.user.role === 'admin'">
+                            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                Dashboard
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('admin.products.index')" :active="route().current('admin.products.*')">
+                                Products
+                            </ResponsiveNavLink>
+                        </template>
+                        
+                        <!-- User Navigation -->
+                        <template v-else>
+                            <ResponsiveNavLink :href="route('products.index')" :active="route().current('products.*')">
+                                Products
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('transactions.index')" :active="route().current('transactions.index')">
+                                My Orders
+                            </ResponsiveNavLink>
+                        </template>
                     </div>
 
                     <!-- Responsive Settings Options -->

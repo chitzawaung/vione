@@ -11,6 +11,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'price',
         'quantity_available',
     ];
@@ -19,4 +20,12 @@ class Product extends Model
         'price' => 'decimal:2',
         'quantity_available' => 'integer',
     ];
+
+    /**
+     * Get the transactions for the product.
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

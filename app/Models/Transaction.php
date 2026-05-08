@@ -14,6 +14,7 @@ class Transaction extends Model
         'product_id',
         'quantity',
         'total_amount',
+        'purchased_at',
     ];
 
     protected $casts = [
@@ -21,6 +22,7 @@ class Transaction extends Model
         'product_id' => 'integer',
         'quantity' => 'integer',
         'total_amount' => 'decimal:2',
+        'purchased_at' => 'datetime',
     ];
 
     public function user()
