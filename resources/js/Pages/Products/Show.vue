@@ -110,10 +110,10 @@ defineProps({
                     <div class="border-t border-gray-200 p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Product Information</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-gray-50 p-4 rounded-lg">
+                            <!-- <div class="bg-gray-50 p-4 rounded-lg">
                                 <p class="text-sm text-gray-500 mb-1">Product ID</p>
                                 <p class="font-medium text-gray-800">#{{ product.id }}</p>
-                            </div>
+                            </div> -->
                             <div class="bg-gray-50 p-4 rounded-lg">
                                 <p class="text-sm text-gray-500 mb-1">Price per Unit</p>
                                 <p class="font-medium text-gray-800">${{ parseFloat(product.price).toFixed(2) }}</p>
