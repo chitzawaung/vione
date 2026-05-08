@@ -2,49 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return Product::all();
-    }
+        $sortBy = request('sort_by', 'id');
+        $sortDirection = request('sort_direction', 'desc');
+        $perPage = request('per_page', 10);
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'quantity_available' => 'required|integer|min:0',
+        // Validate sort parameters
+        $allowedSortFields = ['id', 'name', 'price', 'quantity_available', 'created_at'];
+        if (! in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'id';
+        }
+        if (! in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $products = Product::orderBy($sortBy, $sortDirection)
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return Inertia::render('Products', [
+            'products' => $products,
+            'filters' => [
+                'sort_by' => $sortBy,
+                'sort_direction' => $sortDirection,
+                'per_page' => $perPage,
+            ],
         ]);
-
-        return Product::create($validated);
     }
 
-    public function show(Product $product)
+    public function store(ProductRequest $request)
     {
-        return $product;
+        Product::create($request->validated());
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'price' => 'sometimes|required|numeric|min:0',
-            'quantity_available' => 'sometimes|required|integer|min:0',
-        ]);
+        $product->update($request->validated());
 
-        $product->update($validated);
-
-        return $product;
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Product $product)
     {
         $product->delete();
 
-        return response()->noContent();
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
