@@ -56,7 +56,7 @@ function sort(column) {
     }
 
     router.get(
-        route('products.index'),
+        route('admin.products.index'),
         {
             sort_by: sortField.value,
             sort_direction: sortDirection.value,
@@ -72,7 +72,7 @@ function sort(column) {
 
 function changePerPage(perPage) {
     router.get(
-        route('products.index'),
+        route('admin.products.index'),
         {
             sort_by: sortField.value,
             sort_direction: sortDirection.value,
@@ -106,7 +106,7 @@ function submit() {
     if (isEditing.value && editingProduct.value) {
         form.put(
             route(
-                'products.update',
+                'admin.products.update',
                 editingProduct.value.id
             ),
             {
@@ -117,7 +117,7 @@ function submit() {
             }
         );
     } else {
-        form.post(route('products.store'), {
+        form.post(route('admin.products.store'), {
             preserveScroll: true,
             onSuccess: () => {
                 form.reset();
@@ -136,7 +136,7 @@ function removeProduct(product) {
     }
 
     deleteForm.delete(
-        route('products.destroy', product.id),
+        route('admin.products.destroy', product.id),
         {
             preserveScroll: true,
         }
@@ -148,24 +148,6 @@ function removeProduct(product) {
     <Head title="Products" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <div
-                class="flex items-center justify-between"
-            >
-                <h2
-                    class="font-semibold text-xl text-gray-800 leading-tight"
-                >
-                    Products
-                </h2>
-
-                <Link
-                    href="/dashboard"
-                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700"
-                >
-                    Back to Dashboard
-                </Link>
-            </div>
-        </template>
 
         <div class="py-12">
             <div
