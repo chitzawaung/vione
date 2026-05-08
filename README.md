@@ -1,33 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Vending Machine System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A complete Laravel-based vending machine management system with user-facing product browsing, purchasing, and admin management capabilities.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 🛒 **User Features**
+- Product browsing with search and filtering
+- Product detail pages with images and descriptions
+- Secure purchase system with real-time stock management
+- Transaction history and order tracking
+- Role-based authentication (user/admin)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 👨‍💼 **Admin Features**
+- Complete product CRUD operations
+- Transaction management and reporting
+- User management and analytics
+- Real-time statistics dashboard
+- Advanced filtering and search capabilities
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🔧 **Technical Stack**
+- **Backend**: Laravel 11
+- **Frontend**: Vue 3 with Composition API
+- **UI Framework**: Tailwind CSS
+- **State Management**: Inertia.js
+- **Database**: MySQL
+- **Authentication**: Laravel Breeze
+- **Testing**: PHPUnit
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 📋 **Prerequisites**
+- PHP 8.2 or higher
+- Composer
+- Node.js 18 or higher
+- MySQL 8.0 or higher
+- Git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 🚀 **Quick Installation**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd vending-machine
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Environment Configuration**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Configure Database**
+   Edit your `.env` file with your database credentials:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=vending_machine
+   DB_USERNAME=root
+   DB_PASSWORD=your_password
+   ```
+
+5. **Database Setup**
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+6. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+
+### 🔄 **Complete Setup Commands**
+   ```bash
+   # Clone and setup
+   git clone <repository-url> && cd vending-machine
+   composer install
+   npm install
+   cp .env.example .env
+   php artisan key:generate
+   php artisan migrate:fresh --seed
+   npm run dev
+   ```
+
+### 🌐 **Access the Application**
+- **Development Server**: http://localhost:8000
+- **Login Credentials**:
+  - **Admin**: admin@gmail.com / password
+  - **User**: john@gmail.com / password
 
 ## Laravel Sponsors
 
