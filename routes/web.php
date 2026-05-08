@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TransactionController as UserTransactionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +39,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    
+    // Transaction routes
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
 });
 
 // User routes (only accessible by regular users)
@@ -51,7 +56,7 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/purchase/{product}', [PurchaseController::class, 'store'])->name('purchase.store');
     
     // Transaction routes
-    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions', [UserTransactionController::class, 'index'])->name('transactions.index');
 });
 
 // Profile routes (accessible by all authenticated users)
