@@ -20,21 +20,17 @@ const props = defineProps({
 })
 
 const search = ref(props.filters.search || '')
-const dateFrom = ref(props.filters.date_from || '')
-const dateTo = ref(props.filters.date_to || '')
-const userId = ref(props.filters.user_id || '')
+const userEmail = ref(props.filters.user_email || '')
 const sortBy = ref(props.filters.sort_by || 'created_at')
 const sortDirection = ref(props.filters.sort_direction || 'desc')
 const perPage = ref(props.filters.per_page || 15)
 
 // Watch for changes and update URL
-watch([search, dateFrom, dateTo, userId, sortBy, sortDirection, perPage], () => {
+watch([search, userEmail, sortBy, sortDirection, perPage], () => {
     const params = new URLSearchParams()
     
     if (search.value) params.set('search', search.value)
-    if (dateFrom.value) params.set('date_from', dateFrom.value)
-    if (dateTo.value) params.set('date_to', dateTo.value)
-    if (userId.value) params.set('user_id', userId.value)
+    if (userEmail.value) params.set('user_email', userEmail.value)
     if (sortBy.value) params.set('sort_by', sortBy.value)
     if (sortDirection.value) params.set('sort_direction', sortDirection.value)
     if (perPage.value) params.set('per_page', perPage.value)
@@ -60,15 +56,6 @@ const formatCurrency = (amount) => {
     }).format(amount)
 }
 
-const clearFilters = () => {
-    search.value = ''
-    dateFrom.value = ''
-    dateTo.value = ''
-    userId.value = ''
-    sortBy.value = 'created_at'
-    sortDirection.value = 'desc'
-    perPage.value = '15'
-}
 </script>
 
 <template>
@@ -140,96 +127,6 @@ const clearFilters = () => {
                     </div>
                 </div>
 
-                <!-- Filters -->
-                <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Filters</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                            <input 
-                                type="text" 
-                                v-model="search"
-                                placeholder="Search by user, email, or product..."
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date From</label>
-                            <input 
-                                type="date" 
-                                v-model="dateFrom"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date To</label>
-                            <input 
-                                type="date" 
-                                v-model="dateTo"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">User ID</label>
-                            <input 
-                                type="number" 
-                                v-model="userId"
-                                placeholder="Filter by user ID"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
-                            <select 
-                                v-model="sortBy"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="created_at">Date</option>
-                                <option value="total_amount">Amount</option>
-                                <option value="quantity">Quantity</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Direction</label>
-                            <select 
-                                v-model="sortDirection"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="desc">Newest First</option>
-                                <option value="asc">Oldest First</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Per Page</label>
-                            <select 
-                                v-model="perPage"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                        </div>
-
-                        <div class="flex items-end">
-                            <button 
-                                @click="clearFilters"
-                                class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
-                            >
-                                Clear Filters
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Transactions Table -->
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -338,6 +235,37 @@ const clearFilters = () => {
                             </div>
                         </nav>
                     </div>
+                </div>
+
+                <!-- Pagination -->
+                <div v-if="transactions.links.length > 3" class="mt-6">
+                    <nav class="flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing {{ transactions.from }} to {{ transactions.to }} of {{ transactions.total }} results
+                        </div>
+                        <div class="flex gap-2">
+                            <template v-for="(link, key) in transactions.links" :key="key">
+                                <Link 
+                                    v-if="link.url"
+                                    :href="link.url"
+                                    v-html="link.label"
+                                    :class="{
+                                        'px-3 py-2 text-sm font-medium rounded-md': true,
+                                        'bg-blue-600 text-white': link.active,
+                                        'bg-white text-gray-700 hover:bg-gray-50': !link.active,
+                                        'border border-gray-300': true
+                                    }"
+                                >
+                                </Link>
+                                <span 
+                                    v-else
+                                    v-html="link.label"
+                                    class="px-3 py-2 text-sm font-medium text-gray-500 border border-gray-300 rounded-md cursor-not-allowed"
+                                >
+                                </span>
+                            </template>
+                        </div>
+                    </nav>
                 </div>
             </div>
         </div>
